@@ -9,6 +9,6 @@ setup(
     author_email="k.peihsun@gmail.com",
     packages=find_packages(),
     url="https://github.com/SiriusKoan/RandomUsers",
-    license="LICENSE",
+    license="MIT",
     install_requires=[],
 )

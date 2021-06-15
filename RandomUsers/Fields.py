@@ -2,7 +2,6 @@ import abc
 import random
 import datetime
 from string import ascii_letters, digits, punctuation
-from time import time
 from typing import Callable
 from . import data
 
