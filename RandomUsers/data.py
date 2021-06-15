@@ -1,3 +1,5 @@
 surname = ["Potter"]
 forename = ["Harry"]
 email_domain = ["gmail.com"]
+gender = ["male", "female", "not_provided"]
+location = ["USA", "France", "England", "Taiwan"]
