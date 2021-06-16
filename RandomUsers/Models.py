@@ -3,6 +3,10 @@ import csv
 
 
 class Person(abc.ABC):
+    """
+    Basic person class.
+    """
+
     @abc.abstractmethod
     def generate(self, csv):
         return NotImplementedError
@@ -28,9 +32,21 @@ class User(Person):
         gender=None,
         phone_number=None,
         location=None,
-        information=None,
+        information: dict() = None,
         **kwargs,
     ) -> None:
+        """
+        :param name: Name object
+        :param username: Username object
+        :param password: Password object
+        :param email: Email object
+        :param birth: Birth object
+        :param gender: Gender object
+        :param phone_number: PhoneNumber object
+        :param location: Location object
+        :param information: other user information, such as `{"is_admin": True}`
+        :param kwargs: other customized fields
+        """
         self.information = information
         self.extra = kwargs
         self.fields = dict()
@@ -52,9 +68,20 @@ class User(Person):
             self.fields["location"] = location
 
     def get_available(self):
+        """
+        Return all available fields of the user model.
+
+        :return: <list>
+        """
         return [key for key in list({self.fields, self.extra}.keys())]
 
     def generate(self):
+        """
+        Generate random user object.
+        You can access to the user data by using its attributes.
+
+        :return: <UserInstance>
+        """
         user = UserInstance()
         for key, field in self.fields.items():
             if key == "name":
@@ -72,6 +99,11 @@ class User(Person):
         return user
 
     def bulk_generate(self, n=100):
+        """
+        Generate as many random users as you want.
+
+        :return: <list[UserInstance]>
+        """
         users = []
         for _ in range(n):
             users.append(self.generate())
