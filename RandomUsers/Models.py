@@ -94,8 +94,9 @@ class User(Person):
                 setattr(user, key, field.generate())
         for key, field in self.extra.items():
             setattr(user, key, field.generate())
-        for key, value in self.information.items():
-            setattr(user, key, value)
+        if self.information:
+            for key, value in self.information.items():
+                setattr(user, key, value)
         return user
 
     def bulk_generate(self, n=100):
