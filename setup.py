@@ -5,7 +5,7 @@ setup(
     description="A simple tool helps you generate fake users.",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    version="0.5",
+    version="1.0",
     author="SiriusKoan",
     author_email="k.peihsun@gmail.com",
     packages=find_packages(),

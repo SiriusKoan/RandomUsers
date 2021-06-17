@@ -23,7 +23,7 @@ class Grade(ru.Field):
         return self.value
 
 
-class StudentModel(ru.Person):
+class StudentModel(ru.Model):
     def __init__(
         self, name=None, student_id=None, grade=None, phone_number=None
     ) -> None:

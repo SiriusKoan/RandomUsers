@@ -10,6 +10,6 @@ def sha(s):
 
 username = ru.Username()
 password = ru.Password(allow=ascii_letters + digits, must="$", hash=sha)
-user_model = ru.UserModel(username=username, password=password)
+user_model = ru.BasicModel(username=username, password=password)
 user = user_model.generate()
 print(user)

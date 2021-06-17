@@ -3,7 +3,7 @@ import csv
 from .Exceptions import CsvAndInstanceError
 
 
-class Person(abc.ABC):
+class Model(abc.ABC):
     """
     Basic person class.
     """
@@ -20,13 +20,13 @@ class Person(abc.ABC):
         return NotImplementedError
 
 
-class User:
+class Instance:
     def __init__(self, **kwargs) -> None:
         for key, value in kwargs.items():
             setattr(self, key, value)
 
 
-class UserModel(Person):
+class BasicModel(Model):
     def __init__(
         self,
         name=None,

@@ -15,6 +15,6 @@ class Score(ru.Field):
 name = ru.Name()
 email = ru.Email(allow=string.digits, domain_list=["coolschool.edu"])
 score = Score()
-student_model = ru.UserModel(name=name, email=email, score=score)
+student_model = ru.BasicModel(name=name, email=email, score=score)
 student = student_model.generate()
 print(student)
