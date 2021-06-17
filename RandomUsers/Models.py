@@ -1,5 +1,4 @@
 import abc
-import csv
 
 
 class Person(abc.ABC):
@@ -33,6 +32,7 @@ class User(Person):
         phone_number=None,
         location=None,
         information: dict() = None,
+        instance=None,
         **kwargs,
     ) -> None:
         """
@@ -47,6 +47,8 @@ class User(Person):
         :param information: other user information, such as `{"is_admin": True}`
         :param kwargs: other customized fields
         """
+        self.info = dict()
+        self.instance = instance
         self.information = information
         self.extra = kwargs
         self.fields = dict()
@@ -82,22 +84,24 @@ class User(Person):
 
         :return: <UserInstance>
         """
-        user = UserInstance()
         for key, field in self.fields.items():
             if key == "name":
-                user.surname, user.forename = field.generate()
+                self.info["surname"], self.info["forename"] = field.generate()
             elif key == "birth":
-                user.birthday, user.age = field.generate()
+                self.info["birthday"], self.info["age"] = field.generate()
             elif key == "location":
-                user.location, user.timezone = field.generate()
+                self.info["location"], self.info["timezone"] = field.generate()
             else:
-                setattr(user, key, field.generate())
+                self.info[key] = field.generate()
         for key, field in self.extra.items():
-            setattr(user, key, field.generate())
+            self.info[key] = field.generate()
         if self.information:
             for key, value in self.information.items():
-                setattr(user, key, value)
-        return user
+                self.info[key] = value
+        if self.instance:
+            return self.instance(**self.info)
+        else:
+            return self.instance
 
     def bulk_generate(self, n=100):
         """
