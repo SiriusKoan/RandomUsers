@@ -7,9 +7,8 @@ A simple tool helps you generate fake users.
 ```shell
 $ pip install RandomUsers
 ```
-## Example
-More examples in `/examples`.
-### basic
+## Examples
+### Basic
 ```python
 import RandomUsers as ru
 # Create username object
@@ -21,9 +20,9 @@ email = ru.Email()
 # Create user model object
 user_model = ru.User(username=username, password=password, email=email)
 user = user_model.generate()
-print(user.username, user.password, user.email)
+print(user)
 ```
-### advanced
+### With more fields
 ```python
 import RandomUsers as ru
 name = ru.Name()
@@ -33,5 +32,5 @@ password = ru.Password(length_range=range(20,25), must="@#$")
 birth = ru.Birth(birth_year_range=range(2000, 2011))
 user_model = ru.User(name=name, username=username, password=password, birth=birth)
 user = user_model.generate()
-print(user.surname, user.forename, user.username, user.password, user.birthday, user.age)
+print(user)
 ```

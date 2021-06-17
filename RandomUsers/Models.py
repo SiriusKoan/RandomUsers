@@ -1,4 +1,6 @@
 import abc
+import csv
+from .Exceptions import CsvAndInstanceError
 
 
 class Person(abc.ABC):
@@ -16,8 +18,9 @@ class Person(abc.ABC):
 
 
 class UserInstance:
-    def __init__(self) -> None:
-        pass
+    def __init__(self, **kwargs) -> None:
+        for key, value in kwargs.items():
+            setattr(self, key, value)
 
 
 class User(Person):
@@ -69,21 +72,20 @@ class User(Person):
         if location:
             self.fields["location"] = location
 
-    def get_available(self):
+    def get_available(self) -> list:
         """
         Return all available fields of the user model.
 
         :return: <list>
         """
-        return [key for key in list({self.fields, self.extra}.keys())]
+        return [key for key in list({**self.fields, **self.extra}.keys())]
 
     def generate(self):
         """
         Generate random user object.
         You can access to the user data by using its attributes.
-
-        :return: <UserInstance>
         """
+        self.info = dict()
         for key, field in self.fields.items():
             if key == "name":
                 self.info["surname"], self.info["forename"] = field.generate()
@@ -101,15 +103,21 @@ class User(Person):
         if self.instance:
             return self.instance(**self.info)
         else:
-            return self.instance
+            return self.info
 
-    def bulk_generate(self, n=100):
+    def bulk_generate(self, n=100, csv_file=False):
         """
         Generate as many random users as you want.
-
-        :return: <list[UserInstance]>
         """
+        if csv_file and self.instance:
+            raise CsvAndInstanceError
         users = []
         for _ in range(n):
             users.append(self.generate())
+        if csv_file:
+            with open(csv_file, "w", newline="") as f:
+                writer = csv.writer(f)
+                writer.writerow(self.get_available())
+                for user in users:
+                    writer.writerow(list(user.values()))
         return users
