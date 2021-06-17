@@ -27,10 +27,10 @@ print(user)
 import RandomUsers as ru
 name = ru.Name()
 username = ru.Username()
-# "@", "#" and "$" must be in the password
-password = ru.Password(length_range=range(20,25), must="@#$")
+password = ru.Password(length_range=range(20,25))
 birth = ru.Birth(birth_year_range=range(2000, 2011))
-user_model = ru.User(name=name, username=username, password=password, birth=birth)
+phone_number = ru.PhoneNumber()
+user_model = ru.User(name=name, username=username, password=password, birth=birth, phone_number=phone_number)
 user = user_model.generate()
 print(user)
 ```

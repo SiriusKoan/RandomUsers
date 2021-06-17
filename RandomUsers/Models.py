@@ -7,23 +7,26 @@ class Person(abc.ABC):
     """
     Basic person class.
     """
-
     @abc.abstractmethod
-    def generate(self, csv):
+    def get_available(self):
         return NotImplementedError
 
     @abc.abstractmethod
-    def bulk_generate(self, n, csv):
+    def generate(self):
+        return NotImplementedError
+
+    @abc.abstractmethod
+    def bulk_generate(self, n, csv_file):
         return NotImplementedError
 
 
-class UserInstance:
+class User:
     def __init__(self, **kwargs) -> None:
         for key, value in kwargs.items():
             setattr(self, key, value)
 
 
-class User(Person):
+class UserModel(Person):
     def __init__(
         self,
         name=None,

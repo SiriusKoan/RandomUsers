@@ -140,7 +140,9 @@ class Birth(Field):
     ) -> None:
         """
         :param birth_year_range: the range of birth year. Notice the last number will not in the range
-        :param date_format: the date format for output birthday. It should be available for python time module to parse it
+        :param date_format: the date format for output birthday.
+                            It should be recognizable for python time module to parse it.
+                            If the date format is not recognizable, the module will raise a ValueError.
         """
         self.birthday = None
         self.age = None
