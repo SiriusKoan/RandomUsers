@@ -18,7 +18,7 @@ password = ru.Password()
 # Create email object
 email = ru.Email()
 # Create user model object
-user_model = ru.User(username=username, password=password, email=email)
+user_model = ru.BasicModel(username=username, password=password, email=email)
 user = user_model.generate()
 print(user)
 ```
@@ -30,7 +30,7 @@ username = ru.Username()
 password = ru.Password(length_range=range(20,25))
 birth = ru.Birth(birth_year_range=range(2000, 2011))
 phone_number = ru.PhoneNumber()
-user_model = ru.User(name=name, username=username, password=password, birth=birth, phone_number=phone_number)
+user_model = ru.BasicModel(name=name, username=username, password=password, birth=birth, phone_number=phone_number)
 user = user_model.generate()
 print(user)
 ```
