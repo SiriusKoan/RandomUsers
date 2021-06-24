@@ -111,7 +111,7 @@ class Email(Field):
         domain_list: list[str] = data.email_domain,
     ) -> None:
         """
-        :param length_range: the range of the email's length, but does not include the length of prefix,. Notice the last number will not in the range
+        :param length_range: the range of the email's length, but does not include the length of prefix. Notice the last number will not in the range
         :param prefix: the prefix of every email
         :param allow: allowed characters
         :param domain_list: the domain name list
@@ -134,7 +134,7 @@ class Email(Field):
         return self.value
 
 
-class Birth(Field):
+class Birthday(Field):
     def __init__(
         self, birth_year_range: range = range(1920, 2001), date_format: str = "%Y/%m/%d"
     ) -> None:
@@ -145,7 +145,6 @@ class Birth(Field):
                             If the date format is not recognizable, the module will raise a ValueError.
         """
         self.birthday = None
-        self.age = None
         self.birth_year_range = birth_year_range
         self.date_format = date_format
 
@@ -153,15 +152,42 @@ class Birth(Field):
         """
         Generate random birthday within the given range.
 
-        :return <tuple[str, int]>. The string is the random birthday, and the integer is the age.
+        :return <str>
         """
         start = datetime.date(self.birth_year_range[0], 1, 1)
         end = datetime.date(self.birth_year_range[-1], 12, 31)
         date = start + (end - start) * random.random()
         self.birthday = date.strftime(self.date_format)
-        timedelta = datetime.date.today() - date
-        self.age = int(timedelta.days / 365.2425)
-        return (self.birthday, self.age)
+        return self.birthday
+
+
+class Age(Field):
+    def __init__(self, birthday: str = None, date_format: str = "%Y/%m/%d") -> None:
+        """
+        :param birthday: birthday in specific format
+        :param date_format: the date format for output birthday.
+                            It should be recognizable for python time module to parse it.
+                            If the date format is not recognizable, the module will raise a ValueError.
+        """
+        self.value = None
+        self.date_format = date_format
+        if birthday:
+            self.birthday = datetime.datetime.strptime(birthday, self.date_format)
+            self.birthday = self.birthday.date()
+        else:
+            start = datetime.date(1920, 1, 1)
+            end = datetime.date(2001, 12, 31)
+            self.birthday = start + (end - start) * random.random()
+
+    def generate(self):
+        """
+        Generate age from given birthday or random date if the birthday value is not specified.
+
+        :return value: <int>
+        """
+        timedelta = datetime.date.today() - self.birthday
+        self.value = int(timedelta.days / 365.2425)
+        return self.value
 
 
 class Gender(Field):
@@ -214,10 +240,8 @@ class Location(Field):
     ) -> None:
         """
         :param location_list: location list
-        :param timezone_range: the range of timezone
         """
-        self.location = None
-        self.timezone = None  # timezone doesn't comply to the location
+        self.value = None
         self.location_list = location_list
         self.timezone_range = timezone_range
 
@@ -225,8 +249,25 @@ class Location(Field):
         """
         Generate random location.
 
-        :return: tuple[str, str]. The first string is the location, and the second is the timezone offset.
+        :return: <str>
         """
-        self.location = random.choice(self.location_list)
-        self.timezone = "%+d" % (random.choice(self.timezone_range))
-        return (self.location, self.timezone)
+        self.value = random.choice(self.location_list)
+        return self.value
+
+
+class Timezone(Field):
+    def __init__(self, timezone_range: range = range(-24, 25)) -> None:
+        """
+        :param timezone_range: the range of timezone
+        """
+        self.value = None
+        self.timezone_range = timezone_range
+
+    def generate(self):
+        """
+        Generate random timezone.
+
+        :return: <str>
+        """
+        self.value = "%+d" % (random.choice(self.timezone_range))
+        return self.value

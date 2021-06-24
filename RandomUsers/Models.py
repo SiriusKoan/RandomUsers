@@ -20,7 +20,7 @@ class Model(abc.ABC):
         return NotImplementedError
 
 
-class Instance:
+class Instance(object):
     def __init__(self, **kwargs) -> None:
         for key, value in kwargs.items():
             setattr(self, key, value)
@@ -77,7 +77,7 @@ class BasicModel(Model):
 
     def get_available(self) -> list:
         """
-        Return all available fields of the user model.
+        Return all available fields of the data model.
 
         :return: <list>
         """
@@ -85,7 +85,7 @@ class BasicModel(Model):
 
     def generate(self):
         """
-        Generate random user object.
+        Generate random data object.
         You can access to the user data by using its attributes.
         """
         self.info = dict()
@@ -110,7 +110,7 @@ class BasicModel(Model):
 
     def bulk_generate(self, n=100, csv_file=False):
         """
-        Generate as many random users as you want.
+        Generate as many random data as you want.
         """
         if csv_file and self.instance:
             raise CsvAndInstanceError
@@ -124,3 +124,9 @@ class BasicModel(Model):
                 for user in users:
                     writer.writerow(list(user.values()))
         return users
+
+    def ordered_generate(self, n=100, csv_file=False):
+        """
+        Generate 
+        """
+
