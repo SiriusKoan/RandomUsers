@@ -2,10 +2,10 @@ from setuptools import setup, find_packages
 
 setup(
     name="RandomUsers",
-    description="A simple tool helps you generate fake users.",
+    description="A simple tool helps you generate fake data.",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    version="1.0",
+    version="1.1",
     author="SiriusKoan",
     author_email="k.peihsun@gmail.com",
     packages=find_packages(),

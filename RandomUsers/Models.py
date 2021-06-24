@@ -1,5 +1,6 @@
 import abc
 import csv
+from typing import Dict
 from .Exceptions import CsvAndInstanceError
 
 
@@ -7,6 +8,7 @@ class Model(abc.ABC):
     """
     Basic person class.
     """
+
     @abc.abstractmethod
     def get_available(self):
         return NotImplementedError
@@ -29,51 +31,18 @@ class Instance(object):
 class BasicModel(Model):
     def __init__(
         self,
-        name=None,
-        username=None,
-        password=None,
-        email=None,
-        birth=None,
-        gender=None,
-        phone_number=None,
-        location=None,
         information: dict() = None,
         instance=None,
         **kwargs,
     ) -> None:
         """
-        :param name: Name object
-        :param username: Username object
-        :param password: Password object
-        :param email: Email object
-        :param birth: Birth object
-        :param gender: Gender object
-        :param phone_number: PhoneNumber object
-        :param location: Location object
         :param information: other user information, such as `{"is_admin": True}`
-        :param kwargs: other customized fields
+        :param instance: a container that contain the fields data. The function will return a dict if instance is not given.
+        :param kwargs: fields which is dynamic
         """
-        self.info = dict()
         self.instance = instance
         self.information = information
-        self.extra = kwargs
-        self.fields = dict()
-        if name:
-            self.fields["name"] = name
-        if username:
-            self.fields["username"] = username
-        if password:
-            self.fields["password"] = password
-        if email:
-            self.fields["email"] = email
-        if birth:
-            self.fields["birth"] = birth
-        if gender:
-            self.fields["gender"] = gender
-        if phone_number:
-            self.fields["phone_number"] = phone_number
-        if location:
-            self.fields["location"] = location
+        self.fields = kwargs
 
     def get_available(self) -> list:
         """
@@ -81,32 +50,30 @@ class BasicModel(Model):
 
         :return: <list>
         """
-        return [key for key in list({**self.fields, **self.extra}.keys())]
+        return [key for key in list(self.fields.keys())]
+
+    def write_csv(self, data, csv_file) -> None:
+        with open(csv_file, "w", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(self.get_available())
+            for d in data:
+                writer.writerow(list(d.values()))
 
     def generate(self):
         """
         Generate random data object.
         You can access to the user data by using its attributes.
         """
-        self.info = dict()
+        info = dict()
         for key, field in self.fields.items():
-            if key == "name":
-                self.info["surname"], self.info["forename"] = field.generate()
-            elif key == "birth":
-                self.info["birthday"], self.info["age"] = field.generate()
-            elif key == "location":
-                self.info["location"], self.info["timezone"] = field.generate()
-            else:
-                self.info[key] = field.generate()
-        for key, field in self.extra.items():
-            self.info[key] = field.generate()
+            info[key] = field.generate()
         if self.information:
             for key, value in self.information.items():
-                self.info[key] = value
+                info[key] = value
         if self.instance:
-            return self.instance(**self.info)
+            return self.instance(**info.copy())
         else:
-            return self.info
+            return info.copy()
 
     def bulk_generate(self, n=100, csv_file=False):
         """
@@ -114,19 +81,43 @@ class BasicModel(Model):
         """
         if csv_file and self.instance:
             raise CsvAndInstanceError
-        users = []
+        data = []
         for _ in range(n):
-            users.append(self.generate())
+            data.append(self.generate())
         if csv_file:
-            with open(csv_file, "w", newline="") as f:
-                writer = csv.writer(f)
-                writer.writerow(self.get_available())
-                for user in users:
-                    writer.writerow(list(user.values()))
-        return users
+            self.write_csv(data, csv_file)
+        return data
 
-    def ordered_generate(self, n=100, csv_file=False):
+    def ordered_generate(
+        self,
+        n: range = range(1, 101),
+        ordered_fields: dict[str, str] = None,
+        csv_file=False,
+    ):
         """
-        Generate 
+        Generate
         """
+        if csv_file and self.instance:
+            raise CsvAndInstanceError
 
+        info = dict()
+        data = []
+        fields = self.fields.copy()
+        for key in ordered_fields.keys():
+            fields.pop(key, None)
+        for i in n:
+            for attr, prefix in ordered_fields.items():
+                info[attr] = prefix + str(i)
+            for key, field in fields.items():
+                info[key] = field.generate()
+            if self.information:
+                for key, value in self.information.items():
+                    info[key] = value
+            if self.instance:
+                data.append(self.instance(**info))
+            else:
+                data.append(info.copy())
+
+        if csv_file:
+            self.write_csv(data, csv_file)
+        return data
