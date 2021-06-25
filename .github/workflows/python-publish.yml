@@ -6,7 +6,7 @@ jobs:
     steps: 
     - uses: actions/checkout@v2
     - name: test package
-      run: python run_test.py
+      run: python run_tests.py
 
   deploy:
     runs-on: ubuntu-latest
