@@ -2,6 +2,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/RandomUsers.svg)](https://pypi.python.org/pypi/RandomUsers)
 [![PyPi Package Version](https://img.shields.io/pypi/v/RandomUsers.svg)](https://pypi.python.org/pypi/RandomUsers)  
+![example workflow](https://github.com/SiriusKoan/RandomUsers/actions/workflows/python-publish.yml/badge.svg)  
 A simple tool helps you generate fake users.
 ## Installation
 ```shell
