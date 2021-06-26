@@ -198,7 +198,7 @@ class PhoneNumber(Field):
 
         :return: <str>
         """
-        self.value = self.format
+        self.value = self.format.copy()
         for i in range(len(self.value)):
             if self.value[i] == "i":
                 self.value[i] = random.choice(self.allow)
@@ -210,14 +210,12 @@ class Location(Field):
     def __init__(
         self,
         location_list: list[str] = data.location,
-        timezone_range: range = range(-24, 25),
     ) -> None:
         """
         :param location_list: location list
         """
         self.value = None
         self.location_list = location_list
-        self.timezone_range = timezone_range
 
     def generate(self) -> str:
         """
