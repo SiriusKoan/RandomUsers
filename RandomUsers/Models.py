@@ -95,7 +95,7 @@ class BasicModel(Model):
         csv_file=False,
     ):
         """
-        Generate
+        Generate data in a specific order of numbers.
         """
         if csv_file and self.instance:
             raise CsvAndInstanceError
